@@ -1,5 +1,6 @@
 package br.edu.atitus.gateway_service.configs;
 
+import br.edu.atitus.gateway_service.GatewayServiceApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -7,6 +8,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApiGatewayConfig {
+
+    private final GatewayServiceApplication gatewayServiceApplication;
+
+    ApiGatewayConfig(GatewayServiceApplication gatewayServiceApplication) {
+        this.gatewayServiceApplication = gatewayServiceApplication;
+    }
 
 	@Bean
 	RouteLocator getGatewayRouter(RouteLocatorBuilder builder) {
@@ -23,6 +30,15 @@ public class ApiGatewayConfig {
 				.route(p -> p
 						.path("/currency/**")
 						.uri("lb://currency-service"))
+				.route(p -> p
+						.path("/auth/**")
+						.uri("lb://auth-service"))
+				.route(p -> p
+						.path("/ws/products/**")
+						.uri("lb://product-service"))
+				.route(p -> p
+						.path("/ws/orders/**")
+						.uri("lb://order-service"))
 				.build();
 	}
 	
